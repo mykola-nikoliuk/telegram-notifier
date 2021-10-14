@@ -6,7 +6,6 @@ const https = require('https');
 const cors = require('cors');
 const express = require('express');
 const fs = require('fs');
-const path = require('path');
 const TelegramBot = require('node-telegram-bot-api');
 import { botStandalone } from './classes/botStandalone';
 import { TelegramMessage } from './types';
@@ -14,7 +13,6 @@ import { storage } from './services/storage';
 import { decrypt, encrypt, generateEncryptedToken } from './services/tokens';
 
 const { CERT_PATH, KEY_PATH, TELEGRAM_BOT_TOKEN, TELEGRAM_BOT_NAME, DOMAIN, PORT } = process.env;
-const rootDir = path.join(__dirname, '..');
 
 // Create a bot that uses 'polling' to fetch new updates
 const bot = new TelegramBot(TELEGRAM_BOT_TOKEN, { polling: true });
@@ -100,6 +98,6 @@ function createTokenMessage(message: string, token: string) {
 }
 
 https.createServer({
-  key: fs.readFileSync(path.join(rootDir, KEY_PATH)),
-  cert: fs.readFileSync(path.join(rootDir, CERT_PATH)),
+  key: fs.readFileSync(KEY_PATH),
+  cert: fs.readFileSync(CERT_PATH),
 }, app).listen(PORT);
