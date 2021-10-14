@@ -1,0 +1,28 @@
+{
+  "name": "telegram-notifier",
+  "version": "1.0.0",
+  "description": "Telegram bot that help notify your groups",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "nodemon src/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nick-nikoliuk/telegram-notifier.git"
+  },
+  "author": "Mykola Nikoliuk",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/nick-nikoliuk/telegram-notifier/issues"
+  },
+  "homepage": "https://github.com/nick-nikoliuk/telegram-notifier#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "nodemon": "^2.0.13"
+  },
+  "devDependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^10.0.0"
+  }
+}
