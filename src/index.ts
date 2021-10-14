@@ -42,7 +42,7 @@ app.get('/:token/sendMessage', (req, res) => {
   const options = {
     host: 'api.telegram.org',
     port: 443,
-    path: `/bot${TELEGRAM_BOT_TOKEN}/sendMessage?chat_id=${chatId}&text=${text}`,
+    path: `/bot${TELEGRAM_BOT_TOKEN}/sendMessage?chat_id=${chatId}&text=${encodeURI(text)}`,
     method: 'GET',
   };
 
