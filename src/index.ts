@@ -94,7 +94,7 @@ bot.on('text', (msg: TelegramMessage) => {
 });
 
 function createTokenMessage(message: string, token: string) {
-  return `${message}\n${token}\n\nexample:\nhttps://${DOMAIN}:${PORT}/${token}/sendMessage?text=hello`;
+  return `${message}\n${token}\n\nexample:\nhttps://${DOMAIN}/${token}/sendMessage?text=hello`;
 }
 
 https.createServer({
