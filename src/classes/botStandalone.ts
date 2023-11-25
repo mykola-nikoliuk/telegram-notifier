@@ -2,7 +2,7 @@ const TelegramBot = require('node-telegram-bot-api');
 
 class BotStandalone {
 
-  private _bot: any;
+  private _bot: typeof TelegramBot;
   private _me: any;
 
   constructor() {
@@ -10,7 +10,7 @@ class BotStandalone {
     this._me = null;
   }
 
-  set bot(bot) {
+  set bot(bot: typeof TelegramBot) {
     if (bot instanceof TelegramBot) {
       this._bot = bot;
     } else {
@@ -18,7 +18,7 @@ class BotStandalone {
     }
   }
 
-  sendKeyboard(id, text, buttons, options = {}) {
+  sendKeyboard(id: number, text: string, buttons: [], options = {}) {
     const opts = {
       reply_markup: {
         resize_keyboard: true,
@@ -29,27 +29,27 @@ class BotStandalone {
     return this.sendMessage(id, text, opts);
   }
 
-  sendPhoto(...params) {
+  sendPhoto(...params: Parameters<(typeof TelegramBot)['sendPhoto']>) {
     return this._bot.sendPhoto(...params);
   }
 
-  sendVideo(...params) {
+  sendVideo(...params: Parameters<(typeof TelegramBot)['sendVideo']>) {
     return this._bot.sendVideo(...params);
   }
 
-  sendDocument(...params) {
+  sendDocument(...params: Parameters<(typeof TelegramBot)['sendDocument']>) {
     return this._bot.sendDocument(...params);
   }
 
-  sendMediaGroup(...params) {
+  sendMediaGroup(...params: Parameters<(typeof TelegramBot)['sendMediaGroup']>) {
     return this._bot.sendMediaGroup(...params);
   }
 
-  sendAnimation(...params) {
+  sendAnimation(...params: Parameters<(typeof TelegramBot)['sendMediaGroup']>) {
     return this._bot._formatSendData('animation', ...params);
   }
 
-  sendMessage(id, text, options = {}) {
+  sendMessage(id: number, text: string, options = {}) {
     if (this._bot) {
       const opts = {
         ...options
@@ -61,7 +61,7 @@ class BotStandalone {
     }
   }
 
-  deleteMessage(...params) {
+  deleteMessage(...params: Parameters<(typeof TelegramBot)['deleteMessage']>) {
     return this._bot.deleteMessage(...params);
   }
 
@@ -72,7 +72,7 @@ class BotStandalone {
     return this._me;
   }
 
-  getFileLink(...params) {
+  getFileLink(...params: Parameters<(typeof TelegramBot)['getFileLink']>) {
     return this._bot.getFileLink(...params);
   }
 }

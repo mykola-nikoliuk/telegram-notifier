@@ -1,18 +1,13 @@
-process.env.NTBA_FIX_319 = "NTBA_FIX_319";
-process.env.NTBA_FIX_350 = "NTBA_FIX_350";
-
-require('dotenv').config();
-const https = require('https');
-const cors = require('cors');
-const express = require('express');
-const fs = require('fs');
-const TelegramBot = require('node-telegram-bot-api');
+import './utils/envs';
+import TelegramBot from 'node-telegram-bot-api';
 import { botStandalone } from './classes/botStandalone';
-import { TelegramMessage } from './types';
 import { storage } from './services/storage';
 import { decrypt, encrypt, generateEncryptedToken } from './services/tokens';
+import express from 'express';
+import cors from 'cors';
+import * as https from 'https';
 
-const { CERT_PATH, KEY_PATH, TELEGRAM_BOT_TOKEN, TELEGRAM_BOT_NAME, DOMAIN, PORT } = process.env;
+const { TELEGRAM_BOT_TOKEN, TELEGRAM_BOT_NAME, DOMAIN, PORT } = process.env;
 
 // Create a bot that uses 'polling' to fetch new updates
 const bot = new TelegramBot(TELEGRAM_BOT_TOKEN, { polling: true });
@@ -29,7 +24,7 @@ app.get('/', (req, res) => {
   res.end('it\'s alive!');
 });
 
-app.get('/:token/sendMessage', (req, res) => {
+app.post('/:token/sendMessage', (req, res) => {
   const chatId = storage.getChatId(encrypt(req.params.token));
   const { text = '' } = req.query;
 
@@ -42,7 +37,7 @@ app.get('/:token/sendMessage', (req, res) => {
   const options = {
     host: 'api.telegram.org',
     port: 443,
-    path: `/bot${TELEGRAM_BOT_TOKEN}/sendMessage?chat_id=${chatId}&text=${encodeURI(text)}`,
+    path: `/bot${TELEGRAM_BOT_TOKEN}/sendMessage?chat_id=${chatId}&text=${encodeURI(text as string)}`,
     method: 'GET',
   };
 
@@ -68,7 +63,7 @@ app.get('/:token/sendMessage', (req, res) => {
   request.end();
 });
 
-bot.on('text', (msg: TelegramMessage) => {
+bot.on('text', (msg) => {
   const { chat: { id: chatId }, text = '' } = msg;
 
   switch (true) {
@@ -97,7 +92,4 @@ function createTokenMessage(message: string, token: string) {
   return `${message}\n${token}\n\nexample:\nhttps://${DOMAIN}/${token}/sendMessage?text=hello`;
 }
 
-https.createServer({
-  key: fs.readFileSync(KEY_PATH),
-  cert: fs.readFileSync(CERT_PATH),
-}, app).listen(PORT);
+app.listen(PORT);

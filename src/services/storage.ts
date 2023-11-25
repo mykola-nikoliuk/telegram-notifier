@@ -1,15 +1,16 @@
-const fs = require('fs');
-const path = require('path');
+import * as process from 'process';
 
-const rootDir = path.join(__dirname, '../..');
-const storagePath = path.join(rootDir, 'storage.json');
+import path from 'path';
+import fs from 'fs';
+
+const rootDir: string = process.env.VOLUME_PATH || path.join(__dirname, '../..');
+const storagePath: string = path.join(rootDir, 'storage.json');
 
 class JSONStorage {
   private store: Record<string, number> = {};
 
   constructor() {
     this.load();
-    console.log(this.store);
   }
 
   addItem(token: string, chatId: number) {
@@ -27,12 +28,13 @@ class JSONStorage {
       .reduce((acc, key) => {
         acc[this.store[key]] = key;
         return acc;
-      }, {});
+      }, {} as Record<string, string>);
 
     return revertedStore[chatId];
   }
 
   private load() {
+    fs.mkdirSync(rootDir, { recursive: true });
     if (fs.existsSync(storagePath)) {
       this.store = JSON.parse(fs.readFileSync(storagePath, 'utf-8'));
     }
